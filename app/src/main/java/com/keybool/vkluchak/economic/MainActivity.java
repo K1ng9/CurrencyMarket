@@ -16,8 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Toast;
 
 import java.util.concurrent.TimeUnit;
 
@@ -28,7 +32,9 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
     Button btnBuy, btnSell;
     SimpleCursorAdapter scAdapter;
     ListView lvList;
+    Spinner spinner;
     DB db;
+    Cursor cursor;
 
     final String LOG_TAG = "myLogs";
 
@@ -38,29 +44,60 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         setContentView(R.layout.main);
 
         btnBuy = (Button) findViewById(R.id.btnBuy);
-
         btnSell = (Button) findViewById(R.id.btnSell);
+        spinner = (Spinner) findViewById(R.id.spinner);
+        lvList = (ListView) findViewById(R.id.lvList);
+
         // откриваем подлючение к ДБ
         db = new DB(this);
         db.open();
+        cursor = null;
 
+
+        adapterSpinner();
+        adapterListView();
+    }
+
+    public void adapterSpinner(){
+        // Адаптер для спинера
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.current, android.R.layout.simple_spinner_item);
+        // Определяем разметку для использования при выборе элемента
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Применяем адаптер к элементу spinner
+        spinner.setAdapter(adapter);
+
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // позиция нажатого елемента
+                Object item = parent.getItemAtPosition(position);
+                cursor = db.selectCurrent(item.toString());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    public void adapterListView(){
         //----------------------------------------------------------------------------
         // формируем столбцы сопоставления
         String[] from = new String[]{DB.COLUMN_NAME, DB.COLUMN_COURSE, DB.COLUMN_AMOUNT, DB.COLUMN_PHONE, DB.COLUMN_LOCATION};
         int[] to = new int[]{R.id.tvText1, R.id.tvText2, R.id.tvText3, R.id.tvText4, R.id.tvText5};
 
         // создааем адаптер и настраиваем список
-        scAdapter = new SimpleCursorAdapter(this, R.layout.item_of_list, null, from, to, 0);
-        lvList = (ListView) findViewById(R.id.lvList);
+        scAdapter = new SimpleCursorAdapter(this, R.layout.item_of_list, cursor, from, to, 0);
         lvList.setAdapter(scAdapter);
-
         // добавляем контекстное меню к списку
         registerForContextMenu(lvList);
 
         // создаем лоадер для чтения данных
         getSupportLoaderManager().initLoader(0, null, this);
         //------------------------------------------------------------------------------
-
     }
 
 

@@ -16,7 +16,7 @@ public class DB {
 
     private static final String DB_NAME = "mydbb";
     private static final int DB_VERSION = 2;
-    private static final String DB_TABLE = "currency";
+    public static final String DB_TABLE = "currency";
 
     private static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
@@ -36,8 +36,8 @@ public class DB {
                     COLUMN_AMOUNT   + " text, " +
                     COLUMN_PHONE    + " text, " +
                     COLUMN_LOCATION + " text, " +
-                    COLUMN_STATUS   + " int, " +
-                    COLUMN_CLICKS   + " int" +");";
+                    COLUMN_STATUS   + " int, "  +
+                    COLUMN_CLICKS   + " int" + ");";
 
     private final Context mCtx;
 
@@ -79,14 +79,21 @@ public class DB {
         //mDB.insert(DB_TABLE, null, cv);
     }
 
+    public Cursor selectCurrent(String spinner){
+        Log.d(LOG_TAG, "Whare " +spinner);
+        return mDB.query(DB.DB_TABLE, null, spinner, null, null, null, null);
+    }
+
     // удалить запись из DB_TABLE
     public void delRec(long id) {
-        mDB.delete(DB_TABLE, COLUMN_ID + " = " + id, null);
+        int clearCount =  mDB.delete(DB_TABLE, COLUMN_ID + " = " + id, null);
+        Log.d(LOG_TAG, "deleted rows count = " + clearCount);
     }
     public void delAll(){Log.d(LOG_TAG, "--- Clear mytable: ---");
         // удвляем id записb
-        int clearCount = mDB.delete(DB_TABLE, null, null);
-        Log.d(LOG_TAG, "deleted rows count = " + clearCount);}
+        mDB.delete(DB_TABLE, null, null);
+
+    }
 
 
     // класс по созданию и управлению БД

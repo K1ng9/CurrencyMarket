@@ -7,4 +7,12 @@
     <string name="add_record">Добавить запись</string>
     <string name="delete_record">Удалить запись</string>
 
+    <string-array name="current">
+        <item></item>
+        <item>USD</item>
+        <item>EUR</item>
+        <item>RUB</item>
+    </string-array>
+
+
 </resources>
