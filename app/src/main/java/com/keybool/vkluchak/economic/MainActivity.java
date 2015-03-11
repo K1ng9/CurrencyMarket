@@ -74,6 +74,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
                 // позиция нажатого елемента
                 Object item = parent.getItemAtPosition(position);
                 cursor = db.selectCurrent(item.toString());
+                adapterListView();
             }
 
             @Override
@@ -97,6 +98,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
 
         // создаем лоадер для чтения данных
         getSupportLoaderManager().initLoader(0, null, this);
+
         //------------------------------------------------------------------------------
     }
 

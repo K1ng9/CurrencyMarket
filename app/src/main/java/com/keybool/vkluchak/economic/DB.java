@@ -16,7 +16,7 @@ public class DB {
 
     private static final String DB_NAME = "mydbb";
     private static final int DB_VERSION = 2;
-    public static final String DB_TABLE = "currency";
+    private static final String DB_TABLE = "currency";
 
     private static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
@@ -80,8 +80,12 @@ public class DB {
     }
 
     public Cursor selectCurrent(String spinner){
-        Log.d(LOG_TAG, "Whare " +spinner);
-        return mDB.query(DB.DB_TABLE, null, spinner, null, null, null, null);
+        if(spinner.trim().length() > 0 ) { //работает проверка на пустоту что такое trim() ?
+            Log.d(LOG_TAG, "Whare -" + spinner+"-");
+            String[] str= {spinner};
+            return mDB.rawQuery("SELECT * FROM " +DB_TABLE+ " WHERE " +COLUMN_NAME+ "= ?" , str );
+            //return mDB.query(DB_TABLE, null, COLUMN_NAME + " = " + spinner , null, null, null, null);
+        }else return null;
     }
 
     // удалить запись из DB_TABLE
