@@ -54,11 +54,13 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         cursor = null;
 
 
-        adapterSpinner();
+
         adapterListView();
+        adapterSpinner();
     }
 
     public void adapterSpinner(){
+
         // Адаптер для спинера
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.current, android.R.layout.simple_spinner_item);
@@ -74,7 +76,9 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
                 // позиция нажатого елемента
                 Object item = parent.getItemAtPosition(position);
                 cursor = db.selectCurrent(item.toString());
-                adapterListView();
+
+                scAdapter.notifyDataSetChanged();
+                //adapterListView();
             }
 
             @Override
@@ -85,6 +89,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
     }
 
     public void adapterListView(){
+
         //----------------------------------------------------------------------------
         // формируем столбцы сопоставления
         String[] from = new String[]{DB.COLUMN_NAME, DB.COLUMN_COURSE, DB.COLUMN_AMOUNT, DB.COLUMN_PHONE, DB.COLUMN_LOCATION};

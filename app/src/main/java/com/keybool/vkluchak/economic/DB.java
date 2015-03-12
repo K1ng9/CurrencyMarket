@@ -83,7 +83,7 @@ public class DB {
         if(spinner.trim().length() > 0 ) { //работает проверка на пустоту что такое trim() ?
             Log.d(LOG_TAG, "Whare -" + spinner+"-");
             String[] str= {spinner};
-            return mDB.rawQuery("SELECT * FROM " +DB_TABLE+ " WHERE " +COLUMN_NAME+ "= ?" , str );
+            return mDB.rawQuery("SELECT * FROM " +DB_TABLE+ " WHERE " +COLUMN_NAME+ " = ?" , str );
             //return mDB.query(DB_TABLE, null, COLUMN_NAME + " = " + spinner , null, null, null, null);
         }else return null;
     }
