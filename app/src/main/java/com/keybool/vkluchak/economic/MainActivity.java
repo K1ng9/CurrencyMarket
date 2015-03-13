@@ -76,7 +76,6 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
                 // позиция нажатого елемента
                 Object item = parent.getItemAtPosition(position);
                 cursor = db.selectCurrent(item.toString());
-
                 scAdapter.notifyDataSetChanged();
                 //adapterListView();
             }

@@ -70,11 +70,9 @@ public class AddTicket extends Activity{
     }
 
     public void onclick(View v){
-
         float courseF;
         //обект для даннх
         ContentValues cv = new ContentValues();
-
         //данние из полей в переменние
         //String name = etName.getText().toString();
         String course = etCourse.getText().toString();
