@@ -11,6 +11,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -58,6 +59,12 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         adapterListView();
         adapterSpinner();
     }
+    void updateListView(){
+        //
+        scAdapter.notifyDataSetChanged();
+        lvList.invalidateViews();
+    }
+
 
     public void adapterSpinner(){
 
@@ -76,7 +83,11 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
                 // позиция нажатого елемента
                 Object item = parent.getItemAtPosition(position);
                 cursor = db.selectCurrent(item.toString());
-                scAdapter.notifyDataSetChanged();
+
+                checkCursor(cursor);
+                //updateListView();
+                //scAdapter.notifyDataSetChanged();
+                //lvList.invalidateViews();
                 //adapterListView();
             }
 
@@ -85,6 +96,35 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
 
             }
         });
+    }
+    void checkCursor (Cursor cursor){
+
+        // проверяеm курсор
+        if (cursor.moveToFirst()) {
+
+            // определяем номера столбцов по имени в выборке
+            int idColIndex = cursor.getColumnIndex("_id");
+            int nameColIndex = cursor.getColumnIndex(DB.COLUMN_NAME);
+            int courseColIndex = cursor.getColumnIndex(DB.COLUMN_COURSE);
+            int amountColIndex = cursor.getColumnIndex(DB.COLUMN_AMOUNT);
+            int phoneColIndex = cursor.getColumnIndex(DB.COLUMN_PHONE);
+            int locColIndex = cursor.getColumnIndex(DB.COLUMN_LOCATION);
+
+            do {
+                // получаем значения по номерам столбцов и пишем все в лог
+                Log.d(LOG_TAG,
+                        "ID = " + cursor.getInt(idColIndex) + ", name = "
+                                + cursor.getString(nameColIndex) + ", course = "
+                                + cursor.getString(courseColIndex) + ", amount = "
+                                + cursor.getString(amountColIndex) + ", phone = "
+                                + cursor.getString(phoneColIndex) + ", location = "
+                                + cursor.getString(locColIndex));
+                // переход на следующую строку
+                // а если следующей нет (текущая - последняя), то false -
+                // выходим из цикла
+            } while (cursor.moveToNext());
+        } else
+            Log.d(LOG_TAG, "0 rows");
     }
 
     public void adapterListView(){
