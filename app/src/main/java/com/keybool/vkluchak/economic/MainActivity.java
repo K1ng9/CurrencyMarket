@@ -1,19 +1,16 @@
 package com.keybool.vkluchak.economic;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,15 +19,12 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Toast;
-
-import java.util.concurrent.TimeUnit;
 
 
 public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
 
     private static final int CM_DELETE_ID = 1;
-    Button btnBuy, btnSell;
+    Button btnAdd;
     SimpleCursorAdapter scAdapter;
     ListView lvList;
     Spinner spinner;
@@ -44,8 +38,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        btnBuy = (Button) findViewById(R.id.btnBuy);
-        btnSell = (Button) findViewById(R.id.btnSell);
+        btnAdd = (Button) findViewById(R.id.btnAdd);
         spinner = (Spinner) findViewById(R.id.spinner);
         lvList = (ListView) findViewById(R.id.lvList);
 
@@ -137,13 +130,9 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
 
     public void onclick(View v) {
         switch (v.getId()) {
-            case R.id.btnBuy:
-
-                //buy();
-                break;
-            case R.id.btnSell:
+            case R.id.btnAdd:
                 // включяем активити addTicket виводим его на екран
-                Intent intent = new Intent(this, AddTicket.class);
+                Intent intent = new Intent(this, AddOffer.class);
                 startActivity(intent);
                 break;
         }

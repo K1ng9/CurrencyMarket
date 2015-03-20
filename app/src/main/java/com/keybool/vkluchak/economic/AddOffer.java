@@ -16,10 +16,10 @@ import android.widget.Spinner;
 /**
  * Created by vkluc_000 on 14.02.2015.
  */
-public class AddTicket extends Activity{
+public class AddOffer extends Activity{
     final String LOG_TAG = "myLogs";
 
-    Button btnAdd, btnUpd;
+    Button btnAddOffer, btnUpd;
     EditText etName, etCourse, etId, etAmount, etPhone, etLocation;
     Spinner spinner2;
     //Cursor cursor;
@@ -32,7 +32,7 @@ public class AddTicket extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addticket);
 
-        btnAdd = (Button) findViewById(R.id.btnAdd);
+        btnAddOffer = (Button) findViewById(R.id.btnAddOffer);
         btnUpd = (Button) findViewById(R.id.btnUpd);
 
         etId = (EditText) findViewById(R.id.etID);

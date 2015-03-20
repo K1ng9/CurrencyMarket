@@ -119,19 +119,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:id="@+id/btnAdd"
+            android:id="@+id/btnAddOffer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onclick"
-            android:text="Add Ticket"/>
+            android:text="Add Offer"/>
         <Button
             android:id="@+id/btnUpd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onclick"
-            android:text="Update Ticket"/>
+            android:text="Update Offer"/>
         <Button
             android:id="@+id/btnDelete"
             android:layout_width="wrap_content"
