@@ -7,10 +7,10 @@
         android:layout_height="wrap_content">
 
         <Button
-            android:layout_width="10dp"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:id="@+id/btnAdd"
-            android:layout_marginLeft="300dp"
+            android:layout_marginLeft="280dp"
             android:layout_weight="1"
             android:text="+"
             android:textSize="50dp"
@@ -21,12 +21,20 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <Spinner
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
             android:id="@+id/spinner" />
+
+        <Switch
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:text="Buy/Sell"
+            android:id="@+id/switch1"
+            android:layout_gravity="center_horizontal" />
+
     </LinearLayout>
 
     <ScrollView
