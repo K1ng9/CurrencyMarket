@@ -8,6 +8,7 @@
     <string name="delete_record">Удалить запись</string>
 
     <string-array name="current">
+        <item></item>
         <item>USD</item>
         <item>EUR</item>
         <item>RUB</item>

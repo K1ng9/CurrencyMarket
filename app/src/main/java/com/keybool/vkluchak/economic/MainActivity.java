@@ -54,17 +54,9 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         db.open();
         cursor = null;
 
-
-
         adapterListView();
         adapterSpinner();
     }
-    void updateListView(){
-        //
-        scAdapter.notifyDataSetChanged();
-        lvList.invalidateViews();
-    }
-
 
     public void adapterSpinner(){
 
@@ -82,24 +74,21 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // позиция нажатого елемента
                 Object item = parent.getItemAtPosition(position);
-                cursor = db.selectCurrent(item.toString());
-
-                checkCursor(cursor);
-                //updateListView();
-                //scAdapter.notifyDataSetChanged();
-                //lvList.invalidateViews();
-                //adapterListView();
+                if(item.toString().trim().length() > 0 ) {
+                    cursor = db.selectCurrent(item.toString());
+                    scAdapter.swapCursor(cursor);
+                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
+    // проверяеm курсор
     void checkCursor (Cursor cursor){
 
-        // проверяеm курсор
+
         if (cursor.moveToFirst()) {
 
             // определяем номера столбцов по имени в выборке
@@ -142,7 +131,6 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
 
         // создаем лоадер для чтения данных
         getSupportLoaderManager().initLoader(0, null, this);
-
         //------------------------------------------------------------------------------
     }
 
@@ -184,7 +172,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
     }
 
 
-    // -------------------------LOADER херотень -----------------------
+    // -------------------------LOADER  -----------------------
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new MyCursorLoader(this, db);
@@ -197,7 +185,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        scAdapter.swapCursor(null);
     }
 
     static class MyCursorLoader extends CursorLoader {
@@ -211,11 +199,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         @Override
         public Cursor loadInBackground() {
             Cursor cursor = db.getAllData();
-            try {
-                TimeUnit.SECONDS.sleep(3);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
             return cursor;
         }
     }
