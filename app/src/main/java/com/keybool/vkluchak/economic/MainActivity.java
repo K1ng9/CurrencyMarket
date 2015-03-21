@@ -16,9 +16,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Switch;
 
 
 public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
@@ -29,7 +31,9 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
     ListView lvList;
     Spinner spinner;
     DB db;
+    Switch switchMain;
     Cursor cursor;
+    int sellOrBuySwitch;
 
     final String LOG_TAG = "myLogs";
 
@@ -38,6 +42,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        switchMain = (Switch) findViewById(R.id.switch1);
         btnAdd = (Button) findViewById(R.id.btnAdd);
         spinner = (Spinner) findViewById(R.id.spinner);
         lvList = (ListView) findViewById(R.id.lvList);
@@ -46,12 +51,8 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         db = new DB(this);
         db.open();
         cursor = null;
+        sellOrBuySwitch = 1;
 
-        adapterListView();
-        adapterSpinner();
-    }
-
-    public void adapterSpinner(){
 
         // Адаптер для спинера
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
@@ -61,6 +62,21 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         // Применяем адаптер к элементу spinner
         spinner.setAdapter(adapter);
 
+        adapterSpinner();
+        adapterListView();
+    }
+    public void onClickSwitch(View view){
+        boolean on = ((Switch) view).isChecked();
+        if(on){
+            sellOrBuySwitch = 0;
+        }else{
+            sellOrBuySwitch = 1;
+        }
+    }
+
+    public void adapterSpinner( ){
+
+
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             @Override
@@ -68,15 +84,18 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
                 // позиция нажатого елемента
                 Object item = parent.getItemAtPosition(position);
                 if(item.toString().trim().length() > 0 ) {
-                    cursor = db.selectCurrent(item.toString());
-                    scAdapter.swapCursor(cursor);
-                }
+                    cursor = db.selectCurrent(item.toString(), sellOrBuySwitch);
+                    checkCursor(cursor);
+
+                }else cursor = db.getAllData();
+                scAdapter.swapCursor(cursor);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+
     }
     // проверяеm курсор
     void checkCursor (Cursor cursor){

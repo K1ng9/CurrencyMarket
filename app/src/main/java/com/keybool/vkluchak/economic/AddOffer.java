@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Switch;
 
 /**
  * Created by vkluc_000 on 14.02.2015.
@@ -19,6 +20,7 @@ import android.widget.Spinner;
 public class AddOffer extends Activity{
     final String LOG_TAG = "myLogs";
 
+    Switch swOffer;
     Button btnAddOffer, btnUpd;
     EditText etName, etCourse, etId, etAmount, etPhone, etLocation;
     Spinner spinner2;
@@ -35,8 +37,10 @@ public class AddOffer extends Activity{
         btnAddOffer = (Button) findViewById(R.id.btnAddOffer);
         btnUpd = (Button) findViewById(R.id.btnUpd);
 
+
         etId = (EditText) findViewById(R.id.etID);
         //etName = (EditText) findViewById(R.id.etName);
+        swOffer = (Switch) findViewById(R.id.swOffer);
         spinner2 = (Spinner) findViewById(R.id.spinner2);
         etCourse = (EditText) findViewById(R.id.etCourse);
         etAmount = (EditText) findViewById(R.id.etAmount);
@@ -79,17 +83,23 @@ public class AddOffer extends Activity{
         String amount = etAmount.getText().toString();
         String phone = etPhone.getText().toString();
         String location = etLocation.getText().toString();
+        //boolean sw = swOffer.getShowText();
 
+        //Log.d(LOG_TAG, "Switch = " +sw  );
         if (!TextUtils.isEmpty(course)) {
              courseF = Float.parseFloat(course);
             Log.d(LOG_TAG, "----Curse : "+ courseF);
         }else courseF = (float) 0.01;
 
         switch (v.getId()){
-            case R.id.btnAdd:
-                Log.d(LOG_TAG, "----Insert currency: ----");
+            case R.id.btnAddOffer:
+                if(swOffer.isChecked()) {
+                    Log.d(LOG_TAG, "----Insert currency: ----");
                     db.addRec(nameCarrent, courseF, amount, phone, location, 0, 0);
-                Log.d(LOG_TAG, "----Done----");
+                    Log.d(LOG_TAG, "----Done----");
+                }else
+                    db.addRec(nameCarrent, courseF, amount, phone, location, 1, 0);
+
                 break;
         }
 

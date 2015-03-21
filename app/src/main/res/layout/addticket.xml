@@ -19,8 +19,14 @@
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"/>
-
-
+        <Switch
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:id="@+id/swOffer"
+            android:textOff="Buy"
+            android:textOn="Sell"
+            android:layout_gravity="center_horizontal" >
+            </Switch>
         </LinearLayout>
     <LinearLayout
         android:id="@+id/ll2"
