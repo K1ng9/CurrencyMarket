@@ -2,6 +2,7 @@ package com.keybool.vkluchak.economic;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -11,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -23,10 +25,9 @@ public class AddOffer extends Activity implements TextView.OnEditorActionListene
     final String LOG_TAG = "myLogs";
 
     Switch swOffer;
-    Button btnAddOffer, btnUpd;
-    EditText etName, etCourse, etId, etAmount, etPhone, etLocation;
+    ImageButton btnAddOffer;
+    EditText etCourse,etAmount, etPhone, etLocation;
     Spinner spinner2;
-    //Cursor cursor;
     String nameCarrent;
 
     DB db;
@@ -36,12 +37,8 @@ public class AddOffer extends Activity implements TextView.OnEditorActionListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addoffer);
 
-        btnAddOffer = (Button) findViewById(R.id.btnAddOffer);
-        btnUpd = (Button) findViewById(R.id.btnUpd);
+        btnAddOffer = (ImageButton) findViewById(R.id.btnAddOffer);
 
-
-        etId = (EditText) findViewById(R.id.etID);
-        //etName = (EditText) findViewById(R.id.etName);
         swOffer = (Switch) findViewById(R.id.swOffer);
         spinner2 = (Spinner) findViewById(R.id.spinner2);
         etCourse = (EditText) findViewById(R.id.etCourse);
@@ -80,76 +77,57 @@ public class AddOffer extends Activity implements TextView.OnEditorActionListene
 
     public void onclick(View v){
         float courseF;
-        //обект для даннх
-        ContentValues cv = new ContentValues();
-        //данние из полей в переменние
-        //String name = etName.getText().toString();
         courseF = Float.parseFloat(etCourse.getText().toString());
         String amount = etAmount.getText().toString();
         String phone = etPhone.getText().toString();
         String location = etLocation.getText().toString();
 
-
-        //if (!TextUtils.isEmpty(course)) {
-        //     courseF = Float.parseFloat(course);
-        //    Log.d(LOG_TAG, "----Curse : "+ courseF);
-       // }else {
-        //    etCourse.setError("Input data");
-            //courseF =0;
-        //}
-
-
-
         switch (v.getId()){
             case R.id.btnAddOffer:
                 if(swOffer.isChecked()) {
-                    //if(onEditorAction()) // визивать input проверку
                     Log.d(LOG_TAG, "----Insert currency: ----");
                     db.addRec(nameCarrent, courseF, amount, phone, location, 0, 0);
                     Log.d(LOG_TAG, "----Done----");
                 }else
                     db.addRec(nameCarrent, courseF, amount, phone, location, 1, 0);
-
                 break;
         }
 
     }
 
-    // сделать также для каждого EditText + приошибке останавливать обработку
-
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        switch(v.getId()){
+        switch(v.getId()) {
             case R.id.etAmount:
                 if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (etAmount.getText().toString().trim().equalsIgnoreCase(""))
-                        if(etAmount.getText().toString().trim().matches("(?i).*[a-zа-я].*") ){ // проверь регулярку
+                    if (etAmount.getText().toString().trim().equalsIgnoreCase("")){
+                        //if (etAmount.getText().toString().trim().matches("(?i).*[a-zа-я].*")) { // проверь регулярку
                             etAmount.setError("Please enter digits");
                             return false;
-                        }
-                        else
+                        } else
                             Toast.makeText(getApplicationContext(), "Notnull", Toast.LENGTH_SHORT).show();
                     return false;
-                }return true;
-            case R.id.etCourse:
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (etCourse.getText().toString().trim().equalsIgnoreCase(""))
-                        if(etCourse.getText().toString().trim().matches("(?i).*[a-zа-я].*") ){
-                            etCourse.setError("Please enter some thing!!!");
-                            return false;
-                        }
-                        else return false;
-                } return true;
-            case R.id.etPhone:
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    if (etPhone.getText().toString().trim().equalsIgnoreCase("")){
-                        if(etPhone.getText().toString().trim().length()!= 10 ){
-                            etPhone.setError("Enter in correct form - 0901112233");
-                            return false;
-                        }
-                    }else return false;
                 }
                 return true;
+            case R.id.etCourse:
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (etCourse.getText().toString().trim().equalsIgnoreCase("")){
+                       // if (etCourse.getText().toString().trim().matches("(?i).*[a-zа-я].*")) {
+                            etCourse.setError("Please enter some thing!!!");
+                            return false;
+                        } else return false;
+                }
+                return true;
+            case R.id.etPhone:
+              if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                if (!etPhone.getText().toString().trim().equalsIgnoreCase("")) {
+                    if (etPhone.getText().toString().trim().length() != 10) {
+                        etPhone.setError("Enter in correct form - 0901112233");
+                        return false;
+                    }
+                } else return false;
+              }
+              return true;
             case R.id.etLocation:
                 break;
         }

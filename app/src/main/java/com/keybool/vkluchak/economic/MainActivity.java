@@ -17,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -26,7 +27,7 @@ import android.widget.Switch;
 public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cursor> {
 
     private static final int CM_DELETE_ID = 1;
-    Button btnAdd;
+    ImageButton btnAdd;
     SimpleCursorAdapter scAdapter;
     ListView lvList;
     Spinner spinner;
@@ -43,7 +44,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
         setContentView(R.layout.main);
 
         switchMain = (Switch) findViewById(R.id.switch1);
-        btnAdd = (Button) findViewById(R.id.btnAdd);
+        btnAdd = (ImageButton) findViewById(R.id.btnAdd);
         spinner = (Spinner) findViewById(R.id.spinner);
         lvList = (ListView) findViewById(R.id.lvList);
 
