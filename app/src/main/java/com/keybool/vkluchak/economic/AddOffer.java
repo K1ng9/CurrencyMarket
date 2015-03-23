@@ -2,22 +2,24 @@ package com.keybool.vkluchak.economic;
 
 import android.app.Activity;
 import android.content.ContentValues;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by vkluc_000 on 14.02.2015.
  */
-public class AddOffer extends Activity{
+public class AddOffer extends Activity implements TextView.OnEditorActionListener {
     final String LOG_TAG = "myLogs";
 
     Switch swOffer;
@@ -32,7 +34,7 @@ public class AddOffer extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addticket);
+        setContentView(R.layout.addoffer);
 
         btnAddOffer = (Button) findViewById(R.id.btnAddOffer);
         btnUpd = (Button) findViewById(R.id.btnUpd);
@@ -46,11 +48,14 @@ public class AddOffer extends Activity{
         etAmount = (EditText) findViewById(R.id.etAmount);
         etPhone = (EditText) findViewById(R.id.etPhone);
         etLocation = (EditText) findViewById(R.id.etLocation);
+        etPhone.setOnEditorActionListener(this);
 
         // откриваем подлючение к ДБ
         db = new DB(this);
         db.open();
         adapterSpinner();
+
+
     }
     public void adapterSpinner(){
         // Адаптер для спинера
@@ -79,21 +84,26 @@ public class AddOffer extends Activity{
         ContentValues cv = new ContentValues();
         //данние из полей в переменние
         //String name = etName.getText().toString();
-        String course = etCourse.getText().toString();
+        courseF = Float.parseFloat(etCourse.getText().toString());
         String amount = etAmount.getText().toString();
         String phone = etPhone.getText().toString();
         String location = etLocation.getText().toString();
-        //boolean sw = swOffer.getShowText();
 
-        //Log.d(LOG_TAG, "Switch = " +sw  );
-        if (!TextUtils.isEmpty(course)) {
-             courseF = Float.parseFloat(course);
-            Log.d(LOG_TAG, "----Curse : "+ courseF);
-        }else courseF = (float) 0.01;
+
+        //if (!TextUtils.isEmpty(course)) {
+        //     courseF = Float.parseFloat(course);
+        //    Log.d(LOG_TAG, "----Curse : "+ courseF);
+       // }else {
+        //    etCourse.setError("Input data");
+            //courseF =0;
+        //}
+
+
 
         switch (v.getId()){
             case R.id.btnAddOffer:
                 if(swOffer.isChecked()) {
+                    //if(onEditorAction()) // визивать input проверку
                     Log.d(LOG_TAG, "----Insert currency: ----");
                     db.addRec(nameCarrent, courseF, amount, phone, location, 0, 0);
                     Log.d(LOG_TAG, "----Done----");
@@ -103,5 +113,46 @@ public class AddOffer extends Activity{
                 break;
         }
 
+    }
+
+    // сделать также для каждого EditText + приошибке останавливать обработку
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        switch(v.getId()){
+            case R.id.etAmount:
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (etAmount.getText().toString().trim().equalsIgnoreCase(""))
+                        if(etAmount.getText().toString().trim().matches("(?i).*[a-zа-я].*") ){ // проверь регулярку
+                            etAmount.setError("Please enter digits");
+                            return false;
+                        }
+                        else
+                            Toast.makeText(getApplicationContext(), "Notnull", Toast.LENGTH_SHORT).show();
+                    return false;
+                }return true;
+            case R.id.etCourse:
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (etCourse.getText().toString().trim().equalsIgnoreCase(""))
+                        if(etCourse.getText().toString().trim().matches("(?i).*[a-zа-я].*") ){
+                            etCourse.setError("Please enter some thing!!!");
+                            return false;
+                        }
+                        else return false;
+                } return true;
+            case R.id.etPhone:
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    if (etPhone.getText().toString().trim().equalsIgnoreCase("")){
+                        if(etPhone.getText().toString().trim().length()!= 10 ){
+                            etPhone.setError("Enter in correct form - 0901112233");
+                            return false;
+                        }
+                    }else return false;
+                }
+                return true;
+            case R.id.etLocation:
+                break;
+        }
+        return false;
     }
 }
