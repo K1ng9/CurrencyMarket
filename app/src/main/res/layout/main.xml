@@ -15,21 +15,21 @@
 
         <ImageButton
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:id="@+id/btnAdd"
-            android:background="@mipmap/ic_launcher"
+            android:id="@+id/btnMap"
+            android:background="@mipmap/icon_map"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="20dp"
             android:onClick="onclick" />
 
-        </LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <Spinner
             android:layout_marginLeft="10dp"
@@ -47,6 +47,15 @@
             android:layout_gravity="center_horizontal"
             android:onClick="onClickSwitch"
             android:showText="true"/>
+
+        <ImageButton
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_marginRight="20dp"
+            android:id="@+id/btnAdd"
+            android:background="@mipmap/ic_launcher"
+            android:layout_marginLeft="80dp"
+            android:onClick="onclick" />
 
     </LinearLayout>
 <LinearLayout

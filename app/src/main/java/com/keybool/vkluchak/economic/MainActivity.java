@@ -155,6 +155,11 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Cu
                 Intent intent = new Intent(this, AddOffer.class);
                 startActivity(intent);
                 break;
+            case R.id.btnMap:
+                // включяем активити MapActivity виводим его на екран
+                Intent intent1 = new Intent(this, MapsActivity.class);
+                startActivity(intent1);
+                break;
         }
 
     }
