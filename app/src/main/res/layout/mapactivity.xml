@@ -5,13 +5,35 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <Button
-        android:id="@+id/btnTest"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onClickTest"
-        android:text="@string/test">
-    </Button>
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btnTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:onClick="onClickTest"
+            android:text="beak">
+        </Button>
+        <Button
+            android:id="@+id/btnZoom1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickTest"
+            android:textSize="25dp"
+            android:text="+">
+        </Button>
+        <Button
+            android:id="@+id/btnZoom2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onClickTest"
+            android:textSize="25dp"
+            android:text="-">
+        </Button>
+        </LinearLayout>
+
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"

@@ -1,13 +1,24 @@
 package com.keybool.vkluchak.economic;
 
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.Date;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -15,10 +26,14 @@ public class MapsActivity extends FragmentActivity {
     GoogleMap map;
     final String TAG = "myLogs";
 
+    private LocationManager locationManager;
+    StringBuilder sbGPS = new StringBuilder();
+    StringBuilder sbNet = new StringBuilder();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mapactivity);
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -31,10 +46,110 @@ public class MapsActivity extends FragmentActivity {
     }
 
     private void init() {
+        // долгое нажатие
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                Log.d(TAG, "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
+                if(checkEnabled())
+                    map.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude)).icon(
+                            BitmapDescriptorFactory.fromResource(R.mipmap.map_marker)));
+
+            }
+        });
     }
 
 
     public void onClickTest(View view) {
-        map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        //map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        switch(view.getId()){
+            case R.id.btnZoom1:
+                CameraUpdate cameraUpdate = CameraUpdateFactory.zoomIn();
+                map.animateCamera(cameraUpdate);
+                break;
+            case R.id.btnZoom2:
+                CameraUpdate cameraUpdate2 = CameraUpdateFactory.zoomOut();
+                map.animateCamera(cameraUpdate2);
+                break;
+            case R.id.btnTest:
+                Intent intent1 = new Intent(this, MainActivity.class);
+                startActivity(intent1);
+        }
+
+
     }
+
+    private void showLocation(Location location) {
+        if (location == null)
+            return;
+        if (checkEnabled()){
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(location.getLatitude() - 200, location.getLongitude() + 200))
+                    .zoom(5)
+                    .build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            map.animateCamera(cameraUpdate);
+
+            map.addMarker(new MarkerOptions().position(new LatLng(location.getLatitude(), location.getLongitude())).icon(
+                    BitmapDescriptorFactory.fromResource(R.mipmap.marker_my_location)));
+        }
+    }
+
+    public String formatLocation(Location location) {
+        if (location == null)
+            return "";
+        return String.format(
+                "Coordinates: lat = %1$.4f, lon = %2$.4f, time = %3$tF %3$tT",
+                location.getLatitude(), location.getLongitude(), new Date(
+                        location.getTime()));
+    }
+
+    private boolean checkEnabled() {
+        if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+            return true;
+        else if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+            return true;
+        }else return false;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // параметри(тип провайдера, минимум ждать для получения данних, метров для смени значения)
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                1000 * 10, 10, locationListener);
+        locationManager.requestLocationUpdates(
+                LocationManager.NETWORK_PROVIDER, 1000 * 10, 10,
+                locationListener);
+        checkEnabled();
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(locationListener);
+    }
+
+    private LocationListener locationListener = new LocationListener() {
+
+        @Override
+        public void onLocationChanged(Location location) {
+            showLocation(location);// свой метод
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+        @Override
+        public void onProviderDisabled(String provider) {
+            checkEnabled();
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+            checkEnabled();
+            showLocation(locationManager.getLastKnownLocation(provider));
+        }
+    };
 }
