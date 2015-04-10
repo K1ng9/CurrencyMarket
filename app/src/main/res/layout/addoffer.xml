@@ -114,39 +114,48 @@
             android:inputType="number"/>
         </LinearLayout>
     <LinearLayout
-        android:id="@+id/ll7"
-        android:layout_marginTop="5dp"
+    android:id="@+id/ll7"
+    android:layout_marginTop="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Location"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="25dp"/>
+    <EditText
+        android:id="@+id/etLocation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Location"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="25dp"/>
-        <EditText
-            android:id="@+id/etLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="2dp"
-            android:imeOptions="actionGo"
-            android:inputType="text"/>
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="2dp"
+        android:imeOptions="actionGo"
+        android:inputType="text"/>
+
+</LinearLayout>
     <LinearLayout
         android:id="@+id/ll6"
         android:layout_marginTop="5dp"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <ImageButton
             android:id="@+id/btnAddOffer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@mipmap/ic_launcher"
-            android:onClick="onclick"
-            android:text="Add Offer"/>
+            android:onClick="onclick"/>
+        <ImageButton
+            android:id="@+id/btnAddLoc"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@mipmap/marker_my_location"
+            android:onClick="onclick"/>
 
     </LinearLayout>
 

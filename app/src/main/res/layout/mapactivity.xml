@@ -12,25 +12,27 @@
             android:id="@+id/btnTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:layout_marginLeft="20dp"
             android:onClick="onClickTest"
             android:text="beak">
         </Button>
         <Button
-            android:id="@+id/btnZoom1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onClickTest"
-            android:textSize="25dp"
-            android:text="+">
-        </Button>
+        android:id="@+id/btnSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onClickTest"
+            android:layout_marginLeft="20dp"
+        android:textSize="20dp"
+        android:text="Select">
+    </Button>
         <Button
-            android:id="@+id/btnZoom2"
+            android:id="@+id/btnShow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
             android:onClick="onClickTest"
-            android:textSize="25dp"
-            android:text="-">
+            android:textSize="20dp"
+            android:text="Show">
         </Button>
         </LinearLayout>
 

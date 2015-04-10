@@ -2,6 +2,7 @@ package com.keybool.vkluchak.economic;
 
 import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,16 +17,17 @@ import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 /**
  * Created by vkluc_000 on 14.02.2015.
  */
-public class AddOffer extends Activity implements TextView.OnEditorActionListener {
+public class AddOffer extends Activity implements OnEditorActionListener {
     final String LOG_TAG = "myLogs";
 
     Switch swOffer;
-    ImageButton btnAddOffer;
+    ImageButton btnAddOffer, btnAddLoc;
     EditText etCourse,etAmount, etPhone, etLocation;
     Spinner spinner2;
     String nameCarrent;
@@ -38,6 +40,7 @@ public class AddOffer extends Activity implements TextView.OnEditorActionListene
         setContentView(R.layout.addoffer);
 
         btnAddOffer = (ImageButton) findViewById(R.id.btnAddOffer);
+        btnAddLoc = (ImageButton) findViewById(R.id.btnAddLoc);
 
         swOffer = (Switch) findViewById(R.id.swOffer);
         spinner2 = (Spinner) findViewById(R.id.spinner2);
@@ -46,6 +49,8 @@ public class AddOffer extends Activity implements TextView.OnEditorActionListene
         etPhone = (EditText) findViewById(R.id.etPhone);
         etLocation = (EditText) findViewById(R.id.etLocation);
         etPhone.setOnEditorActionListener(this);
+        //для кординат
+        String cordinats = "";
 
         // откриваем подлючение к ДБ
         db = new DB(this);
@@ -82,17 +87,32 @@ public class AddOffer extends Activity implements TextView.OnEditorActionListene
         String phone = etPhone.getText().toString();
         String location = etLocation.getText().toString();
 
+
         switch (v.getId()){
             case R.id.btnAddOffer:
+                String address1 = location.split( " -" )[0]; // адрес
+                String address2   = location.split( "-" )[1]; // кординати
                 if(swOffer.isChecked()) {
                     Log.d(LOG_TAG, "----Insert currency: ----");
-                    db.addRec(nameCarrent, courseF, amount, phone, location, 0, 0);
+                    db.addRec(nameCarrent, courseF, amount, phone, address1, 0, address2);
                     Log.d(LOG_TAG, "----Done----");
                 }else
-                    db.addRec(nameCarrent, courseF, amount, phone, location, 1, 0);
+                    db.addRec(nameCarrent, courseF, amount, phone, address1, 1, address2);
+                break;
+            case R.id.btnAddLoc:
+                        Intent myIntent = new Intent(this,
+                               MapsActivity.class);
+                        startActivityForResult(myIntent, 1);
                 break;
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (data == null) {return;}
+        String address = data.getStringExtra("address");
+        etLocation.setText(address);
     }
 
     @Override
@@ -119,18 +139,18 @@ public class AddOffer extends Activity implements TextView.OnEditorActionListene
                 }
                 return true;
             case R.id.etPhone:
-              if (actionId == EditorInfo.IME_ACTION_NEXT) {
+              //if (actionId == EditorInfo.IME_ACTION_NEXT) {
                 if (!etPhone.getText().toString().trim().equalsIgnoreCase("")) {
                     if (etPhone.getText().toString().trim().length() != 10) {
                         etPhone.setError("Enter in correct form - 0901112233");
                         return false;
                     }
-                } else return false;
+                //} else return false;
               }
               return true;
             case R.id.etLocation:
                 break;
-        }
-        return false;
+        }return true;
+        //return false;
     }
 }

@@ -14,7 +14,7 @@ public class DB {
 
     final String LOG_TAG = "myLogs";
 
-    private static final String DB_NAME = "mydbb";
+    private static final String DB_NAME = "db";
     private static final int DB_VERSION = 2;
     private static final String DB_TABLE = "currency";
 
@@ -37,7 +37,7 @@ public class DB {
                     COLUMN_PHONE    + " text, " +
                     COLUMN_LOCATION + " text, " +
                     COLUMN_STATUS   + " int, "  +
-                    COLUMN_CLICKS   + " int" + ");";
+                    COLUMN_CLICKS   + " BLOB" + ");";
 
     private final Context mCtx;
 
@@ -65,7 +65,7 @@ public class DB {
     }
 
     // добавить запись
-    public void addRec(String name, float course, String amount, String phone, String location, int status, int clicks ) {
+    public void addRec(String name, float course, String amount, String phone, String location, int status, String clicks ) {
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_NAME, name);
         cv.put(COLUMN_COURSE, course);
@@ -79,14 +79,17 @@ public class DB {
         //mDB.insert(DB_TABLE, null, cv);
     }
 
+    // виборка из бази по валюте и статусу
     public Cursor selectCurrent(String spinner, int sellOrBuy){
-        if(spinner.trim().length() > 0 ) { //работает проверка на пустоту что такое trim() ?
+        if(spinner.trim().length() > 0 ) { //работает проверка на пустоту
             Log.d(LOG_TAG, "Whare -" + spinner +"-");
             String[] str= {spinner};
             return mDB.rawQuery("SELECT * FROM " +DB_TABLE+ " WHERE " +COLUMN_NAME+ " = ? AND " +COLUMN_STATUS + " = " + sellOrBuy, str );
             //return mDB.query(DB_TABLE, null, COLUMN_NAME + " = " + spinner , null, null, null, null);
         }else return null;
     }
+
+    //обновить инфу
 
     // удалить запись из DB_TABLE
     public void delRec(long id) {
