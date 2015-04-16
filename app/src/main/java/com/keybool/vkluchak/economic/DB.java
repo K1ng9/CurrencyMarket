@@ -119,6 +119,13 @@ public class DB {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            String query = "DROP TABLE IF EXISTS " + DB_TABLE;
+            // Executes the query provided as long as the query isn't a select
+            // or if the query doesn't return any data
+
+            db.execSQL(query);
+            onCreate(db);
+
         }
     }
 

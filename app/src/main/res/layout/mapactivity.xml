@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:onClick="onClickTest"
-            android:text="beak">
+            android:text="back">
         </Button>
         <Button
         android:id="@+id/btnSelect"
